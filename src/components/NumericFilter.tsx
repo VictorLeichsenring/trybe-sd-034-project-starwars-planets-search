@@ -1,19 +1,39 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
-import { PlanetsContextPropsType } from '../types';
+import { PlanetsContextPropsType, NumericFilterTypes } from '../types';
 
 function NumericFilter(): JSX.Element {
-  const { setNumericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
+  const { setNumericFilter,
+    numericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
+  const [selectedFilters, setSelectedFilters] = useState<NumericFilterTypes[]>([]);
 
-  const handleFilter = () => {
+  const handleApplyFilters = () => {
     const column = (document.getElementById('column-filter') as HTMLSelectElement).value;
-    const comparison = (
-      document.getElementById('comparison-filter') as HTMLSelectElement).value;
+    const comparison = (document.getElementById('comparison-filter') as HTMLSelectElement)
+      .value;
     const inputElement = document.getElementById('value-filter') as HTMLInputElement;
     const value = parseInt(inputElement.value, 10);
 
     const newFilter = { column, comparison, value };
-    setNumericFilter([newFilter]);
+
+    // Verificar se o filtro já existe na lista
+    const isFilterDuplicate = selectedFilters.some(
+      (filter) => filter.column === newFilter.column
+        && filter.comparison === newFilter.comparison
+        && filter.value === newFilter.value,
+    );
+
+    if (!isFilterDuplicate) {
+      setNumericFilter([...numericFilter, newFilter]);
+      setSelectedFilters([...selectedFilters, newFilter]);
+    }
+  };
+
+  const handleRemoveFilter = (index: number) => {
+    const updatedFilters = [...numericFilter];
+    updatedFilters.splice(index, 1);
+    setNumericFilter(updatedFilters);
+    setSelectedFilters(selectedFilters.filter((_, i) => i !== index));
   };
 
   return (
@@ -32,11 +52,29 @@ function NumericFilter(): JSX.Element {
         <option value="equal_to">igual a</option>
       </select>
 
-      <input type="number" data-testid="value-filter" id="value-filter" />
+      <input type="number" data-testid="value-filter" id="value-filter" min={ 1 } />
 
-      <button data-testid="button-filter" onClick={ handleFilter }>
+      <button data-testid="button-filter" onClick={ handleApplyFilters }>
         Filtrar
       </button>
+
+      {selectedFilters.length > 0 && (
+        <div className="selected-filters">
+          <p>Filtros Aplicados:</p>
+          <ul>
+            {selectedFilters.map((filter, index) => (
+              <li key={ index }>
+                {filter.column}
+                {' '}
+                {filter.comparison}
+                {' '}
+                {filter.value}
+                <button onClick={ () => handleRemoveFilter(index) }>Remover</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
