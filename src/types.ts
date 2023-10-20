@@ -17,6 +17,8 @@ export type PlanetType = {
 export type PlanetsContextPropsType = {
   planets: PlanetType[];
   setPlanets: React.Dispatch<React.SetStateAction<PlanetType[]>>;
+  nameFilter: string;
+  setNameFilter: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type PlanetsProviderPropsType = {

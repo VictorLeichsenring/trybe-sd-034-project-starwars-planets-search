@@ -3,8 +3,11 @@ import usePlanets from '../hooks/usePlanets';
 import { PlanetType } from '../types';
 
 function Table(): JSX.Element {
-  const { planets } = usePlanets();
-  console.log(planets);
+  const { planets, nameFilter } = usePlanets();
+
+  const filteredPlanets = planets.filter((planet) => {
+    return planet.name.toLowerCase().includes(nameFilter.toLowerCase());
+  });
 
   return (
     <table>
@@ -26,7 +29,7 @@ function Table(): JSX.Element {
         </tr>
       </thead>
       <tbody>
-        {planets.map((planet: PlanetType) => (
+        {filteredPlanets.map((planet: PlanetType) => (
           <tr key={ planet.name }>
             <td>{planet.name}</td>
             <td>{planet.rotation_period}</td>

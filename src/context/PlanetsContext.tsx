@@ -7,9 +7,10 @@ export const PlanetsContext = createContext<PlanetsContextPropsType | undefined>
 
 function PlanetsProvider({ children = null }: PlanetsProviderPropsType): JSX.Element {
   const [planets, setPlanets] = useState<PlanetType[]>([]);
+  const [nameFilter, setNameFilter] = useState<string>('');
 
   return (
-    <PlanetsContext.Provider value={ { planets, setPlanets } }>
+    <PlanetsContext.Provider value={ { planets, setPlanets, nameFilter, setNameFilter } }>
       {children}
     </PlanetsContext.Provider>
   );
