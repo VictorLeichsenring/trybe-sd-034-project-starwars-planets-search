@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
 import { PlanetsContextPropsType, NumericFilterTypes } from '../types';
 
@@ -7,6 +7,21 @@ function NumericFilter(): JSX.Element {
     numericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
   const [selectedFilters, setSelectedFilters] = useState<NumericFilterTypes[]>([]);
   const [inputValue, setInputValue] = useState<string>('0'); // Inicializa com '0'
+  const [availableColumns, setAvailableColumns] = useState<string[]>([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
+
+  useEffect(() => {
+    // Remove colunas já usadas nos filtros da lista de opções
+    const usedColumns = numericFilter.map((filter) => filter.column);
+    const remainingColumns = availableColumns
+      .filter((column) => !usedColumns.includes(column));
+    setAvailableColumns(remainingColumns);
+  }, [numericFilter]);
 
   const handleApplyFilters = () => {
     const column = (document.getElementById('column-filter') as HTMLSelectElement).value;
@@ -16,11 +31,10 @@ function NumericFilter(): JSX.Element {
 
     const newFilter = { column, comparison, value };
 
-    // Verificar se o filtro já existe na lista
     const isFilterDuplicate = selectedFilters.some(
       (filter) => filter.column === newFilter.column
-        && filter.comparison === newFilter.comparison
-        && filter.value === newFilter.value,
+      && filter.comparison === newFilter.comparison
+      && filter.value === newFilter.value,
     );
 
     if (!isFilterDuplicate) {
@@ -39,11 +53,11 @@ function NumericFilter(): JSX.Element {
   return (
     <div>
       <select data-testid="column-filter" id="column-filter">
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {availableColumns.map((column) => (
+          <option key={ column } value={ column }>
+            {column}
+          </option>
+        ))}
       </select>
 
       <select data-testid="comparison-filter" id="comparison-filter">
