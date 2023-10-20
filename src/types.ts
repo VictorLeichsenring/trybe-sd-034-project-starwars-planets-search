@@ -21,6 +21,8 @@ export type PlanetsContextPropsType = {
   setNameFilter: React.Dispatch<React.SetStateAction<string>>;
   numericFilter: NumericFilterTypes[];
   setNumericFilter: React.Dispatch<React.SetStateAction<NumericFilterTypes[]>>;
+  sort: { column: string; sort: 'ASC' | 'DESC' };
+  setSort: React.Dispatch<React.SetStateAction<{ column: string; sort: 'ASC' | 'DESC' }>>;
 };
 
 export type PlanetsProviderPropsType = {

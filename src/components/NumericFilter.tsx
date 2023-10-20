@@ -1,10 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
-import { PlanetsContextPropsType, NumericFilterTypes } from '../types';
+import { PlanetsContextPropsType, NumericFilterTypes, PlanetType } from '../types';
 
 function NumericFilter(): JSX.Element {
-  const { setNumericFilter,
-    numericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
+  // const { setNumericFilter,
+  //   numericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
+  const { planets,
+    setPlanets,
+    numericFilter,
+    setNumericFilter,
+    sort,
+    setSort } = useContext(PlanetsContext) as PlanetsContextPropsType;
+
   const [selectedFilters, setSelectedFilters] = useState<NumericFilterTypes[]>([]);
   const [inputValue, setInputValue] = useState<string>('0'); // Inicializa com '0'
   const [availableColumns, setAvailableColumns] = useState<string[]>([
@@ -14,6 +21,9 @@ function NumericFilter(): JSX.Element {
     'rotation_period',
     'surface_water',
   ]);
+  // const [sortColumn, setSortColumn] = useState<string>(''); // Coluna a ser ordenada
+  // const [sortType, setSortType] = useState<string>('ASC'); // Tipo de ordenação (ASC ou DESC)
+  // const [sortInfo, setSortInfo] = useState({ column: '', sort: 'ASC' });
 
   useEffect(() => {
     // Remove colunas já usadas nos filtros da lista de opções
@@ -21,7 +31,7 @@ function NumericFilter(): JSX.Element {
     const remainingColumns = availableColumns
       .filter((column) => !usedColumns.includes(column));
     setAvailableColumns(remainingColumns);
-  }, [numericFilter]);
+  }, [availableColumns, numericFilter]);
 
   const handleApplyFilters = () => {
     const column = (document.getElementById('column-filter') as HTMLSelectElement).value;
@@ -55,8 +65,95 @@ function NumericFilter(): JSX.Element {
     setSelectedFilters([]);
   };
 
+  const comparePlanets: (
+    planetA: PlanetType,
+    planetB: PlanetType
+  ) => number = (planetA, planetB) => {
+    const columnKey = sort.column as keyof PlanetType;
+
+    const valueA = getValueForComparison(planetA[columnKey]);
+    const valueB = getValueForComparison(planetB[columnKey]);
+
+    if (valueA === -Infinity && valueB === -Infinity) return 0; // Both are "unknown"
+    if (valueA === -Infinity) return 1; // A is "unknown", so it should appear last
+    if (valueB === -Infinity) return -1; // B is "unknown", so it should appear last
+
+    return sort.sort === 'ASC' ? valueA - valueB : valueB - valueA;
+  };
+
+  const getValueForComparison = (value: string | string[]): number => {
+    if (Array.isArray(value)) {
+      return -Infinity;
+    }
+
+    const parsedValue = parseFloat(value);
+    return Number.isNaN(parsedValue) || value === 'unknown' ? -Infinity : parsedValue;
+  };
+
+  const handleSort = () => {
+    if (sort.column && sort.sort) {
+      const sortedPlanets = [...planets].sort(comparePlanets);
+      setPlanets(sortedPlanets);
+    }
+  };
+
+  const handleSortColumnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSort((prevSort: any) => ({ ...prevSort, column: e.target.value }));
+  };
+
+  const handleSortTypeChange = (value: 'ASC' | 'DESC') => {
+    setSort((prevSort: any) => ({ ...prevSort, sort: value }));
+  };
+
   return (
     <div>
+      <select
+        data-testid="column-sort"
+        value={ sort.column }
+        onChange={ handleSortColumnChange }
+      >
+        <option value="">Selecionar Coluna</option>
+        <option value="name">Name</option>
+        <option value="rotation_period">Rotation Period</option>
+        <option value="orbital_period">Orbital Period</option>
+        <option value="diameter">Diameter</option>
+        <option value="climate">Climate</option>
+        <option value="gravity">Gravity</option>
+        <option value="terrain">Terrain</option>
+        <option value="surface_water">Surface Water</option>
+        <option value="population">Population</option>
+        <option value="films">Films</option>
+        <option value="created">Created</option>
+        <option value="edited">Edited</option>
+        <option value="url">URL</option>
+      </select>
+
+      <label>
+        <input
+          type="radio"
+          data-testid="column-sort-input-asc"
+          value="ASC"
+          checked={ sort.sort === 'ASC' }
+          onChange={ () => handleSortTypeChange('ASC') }
+        />
+        Ascendente
+      </label>
+
+      <label>
+        <input
+          type="radio"
+          data-testid="column-sort-input-desc"
+          value="DESC"
+          checked={ sort.sort === 'DESC' }
+          onChange={ () => handleSortTypeChange('DESC') }
+        />
+        Descendente
+      </label>
+
+      <button data-testid="column-sort-button" onClick={ handleSort }>
+        Ordenar
+      </button>
+
       <select data-testid="column-filter" id="column-filter">
         {availableColumns.map((column) => (
           <option key={ column } value={ column }>
