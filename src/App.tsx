@@ -1,11 +1,15 @@
 import React from 'react';
 import './App.css';
-
-// comentario para commit inicial
+import { PlanetsProvider } from './context/PlanetsContext';
+import PlanetFetch from './components/Planetfetch';
+import Table from './components/Table';
 
 function App() {
   return (
-    <span>Hello, App!</span>
+    <PlanetsProvider>
+      <PlanetFetch />
+      <Table />
+    </PlanetsProvider>
   );
 }
 
