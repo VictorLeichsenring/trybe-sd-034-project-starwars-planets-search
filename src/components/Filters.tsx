@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { PlanetsContext } from '../context/PlanetsContext';
+import { PlanetsContextPropsType } from '../types';
 
 function Filters(): JSX.Element {
-  const { nameFilter, setNameFilter } = useContext(PlanetsContext);
+  const contextValue = useContext(PlanetsContext) as PlanetsContextPropsType;
+  const { nameFilter, setNameFilter } = contextValue;
 
   const handleNameFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (setNameFilter) {
