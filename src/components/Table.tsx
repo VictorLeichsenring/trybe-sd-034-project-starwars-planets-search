@@ -4,6 +4,7 @@ import { PlanetType } from '../types';
 
 function Table(): JSX.Element {
   const { planets } = usePlanets();
+  console.log(planets);
 
   return (
     <table>
@@ -36,7 +37,11 @@ function Table(): JSX.Element {
             <td>{planet.terrain}</td>
             <td>{planet.surface_water}</td>
             <td>{planet.population}</td>
-            <td>{planet.films.length}</td>
+            <td>
+              {planet.films.map((url) => (
+                <div className="film-url" key={ url }>{url}</div>
+              ))}
+            </td>
             <td>{planet.created}</td>
             <td>{planet.edited}</td>
             <td>{planet.url}</td>
