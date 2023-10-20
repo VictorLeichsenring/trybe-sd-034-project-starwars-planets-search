@@ -19,8 +19,16 @@ export type PlanetsContextPropsType = {
   setPlanets: React.Dispatch<React.SetStateAction<PlanetType[]>>;
   nameFilter: string;
   setNameFilter: React.Dispatch<React.SetStateAction<string>>;
+  numericFilter: NumericFilterTypes[];
+  setNumericFilter: React.Dispatch<React.SetStateAction<NumericFilterTypes[]>>;
 };
 
 export type PlanetsProviderPropsType = {
   children: React.ReactNode;
+};
+
+export type NumericFilterTypes = {
+  column: string;
+  comparison: string;
+  value: number;
 };
