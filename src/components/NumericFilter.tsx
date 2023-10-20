@@ -50,6 +50,11 @@ function NumericFilter(): JSX.Element {
     setSelectedFilters(selectedFilters.filter((_, i) => i !== index));
   };
 
+  const handleRemoveAllFilters = () => {
+    setNumericFilter([]);
+    setSelectedFilters([]);
+  };
+
   return (
     <div>
       <select data-testid="column-filter" id="column-filter">
@@ -78,18 +83,26 @@ function NumericFilter(): JSX.Element {
         Filtrar
       </button>
 
+      <button data-testid="button-remove-filters" onClick={ handleRemoveAllFilters }>
+        Remover todas as filtragens
+      </button>
+
       {selectedFilters.length > 0 && (
         <div className="selected-filters">
           <p>Filtros Aplicados:</p>
           <ul>
             {selectedFilters.map((filter, index) => (
-              <li key={ index }>
+              <li key={ index } data-testid="filter">
                 {filter.column}
                 {' '}
                 {filter.comparison}
                 {' '}
                 {filter.value}
-                <button onClick={ () => handleRemoveFilter(index) }>Remover</button>
+                <button
+                  onClick={ () => handleRemoveFilter(index) }
+                >
+                  Remover
+                </button>
               </li>
             ))}
           </ul>
