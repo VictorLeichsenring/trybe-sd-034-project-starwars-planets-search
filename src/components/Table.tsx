@@ -19,11 +19,11 @@ function Table(): JSX.Element {
       const planetValue = parseFloat(planet[columnKey] as string);
 
       switch (filter.comparison) {
-        case 'greater_than':
+        case 'maior que':
           return planetValue > filter.value;
-        case 'less_than':
+        case 'menor que':
           return planetValue < filter.value;
-        case 'equal_to':
+        case 'igual a':
           return planetValue === filter.value;
         default:
           return true;

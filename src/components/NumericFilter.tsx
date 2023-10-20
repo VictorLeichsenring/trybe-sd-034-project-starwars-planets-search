@@ -6,13 +6,13 @@ function NumericFilter(): JSX.Element {
   const { setNumericFilter,
     numericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
   const [selectedFilters, setSelectedFilters] = useState<NumericFilterTypes[]>([]);
+  const [inputValue, setInputValue] = useState<string>('0'); // Inicializa com '0'
 
   const handleApplyFilters = () => {
     const column = (document.getElementById('column-filter') as HTMLSelectElement).value;
     const comparison = (document.getElementById('comparison-filter') as HTMLSelectElement)
       .value;
-    const inputElement = document.getElementById('value-filter') as HTMLInputElement;
-    const value = parseInt(inputElement.value, 10);
+    const value = parseInt(inputValue, 10); // Usa o estado inputValue
 
     const newFilter = { column, comparison, value };
 
@@ -47,12 +47,18 @@ function NumericFilter(): JSX.Element {
       </select>
 
       <select data-testid="comparison-filter" id="comparison-filter">
-        <option value="greater_than">maior que</option>
-        <option value="less_than">menor que</option>
-        <option value="equal_to">igual a</option>
+        <option value="maior que">maior que</option>
+        <option value="menor que">menor que</option>
+        <option value="igual a">igual a</option>
       </select>
 
-      <input type="number" data-testid="value-filter" id="value-filter" min={ 1 } />
+      <input
+        type="number"
+        data-testid="value-filter"
+        id="value-filter"
+        value={ inputValue }
+        onChange={ (e) => setInputValue(e.target.value) } // Atualiza o estado inputValue
+      />
 
       <button data-testid="button-filter" onClick={ handleApplyFilters }>
         Filtrar
