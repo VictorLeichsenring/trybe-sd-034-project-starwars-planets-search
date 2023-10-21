@@ -3,8 +3,6 @@ import { PlanetsContext } from '../context/PlanetsContext';
 import { PlanetsContextPropsType, NumericFilterTypes, PlanetType } from '../types';
 
 function NumericFilter(): JSX.Element {
-  // const { setNumericFilter,
-  //   numericFilter } = useContext(PlanetsContext) as PlanetsContextPropsType;
   const { planets,
     setPlanets,
     numericFilter,
@@ -21,17 +19,14 @@ function NumericFilter(): JSX.Element {
     'rotation_period',
     'surface_water',
   ]);
-  // const [sortColumn, setSortColumn] = useState<string>(''); // Coluna a ser ordenada
-  // const [sortType, setSortType] = useState<string>('ASC'); // Tipo de ordenação (ASC ou DESC)
-  // const [sortInfo, setSortInfo] = useState({ column: '', sort: 'ASC' });
 
   useEffect(() => {
     // Remove colunas já usadas nos filtros da lista de opções
     const usedColumns = numericFilter.map((filter) => filter.column);
     const remainingColumns = availableColumns
-      .filter((column) => !usedColumns.includes(column));
+      .filter((column) => !usedColumns.includesgit(column));
     setAvailableColumns(remainingColumns);
-  }, [availableColumns, numericFilter]);
+  }, [numericFilter]);
 
   const handleApplyFilters = () => {
     const column = (document.getElementById('column-filter') as HTMLSelectElement).value;
