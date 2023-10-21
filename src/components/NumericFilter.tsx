@@ -24,7 +24,7 @@ function NumericFilter(): JSX.Element {
     // Remove colunas já usadas nos filtros da lista de opções
     const usedColumns = numericFilter.map((filter) => filter.column);
     const remainingColumns = availableColumns
-      .filter((column) => !usedColumns.includesgit(column));
+      .filter((column) => !usedColumns.includes(column));
     setAvailableColumns(remainingColumns);
   }, [numericFilter]);
 
