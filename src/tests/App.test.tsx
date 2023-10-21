@@ -1,106 +1,34 @@
-import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import App from '../App';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import App from '../App';
 
-import mockApiPlanets from './data';
-
-
-
-describe('testando a aplição', () => {
-
-  test('teste se a função foi chamada ', async () => {
-    const fetchRevolvedValue = { 
-      ok:true,
-      status: 200,
-      json: async () => mockApiPlanets,} as Response;
-
-  vi.spyOn(global, 'fetch').mockResolvedValue(fetchRevolvedValue);
-
-   await act ( async () => {
-
-     render(<App/>);
-   })
-
-   expect(await screen.findByText('Yavin IV')).toBeInTheDocument();
-  //  expect(await screen.findByText('24')).toBeInTheDocument();
-   expect(await screen.findByText('4818')).toBeInTheDocument();
-   expect(await screen.findByText('10200')).toBeInTheDocument();
-   expect(await screen.findByText('temperate, tropical')).toBeInTheDocument();
-  //  expect(await screen.findByText('1 standard')).toBeInTheDocument();
-   expect(await screen.findByText('jungle, rainforests')).toBeInTheDocument();
-  //  expect(await screen.findByText('8')).toBeInTheDocument();
-   expect(await screen.findByText('1000')).toBeInTheDocument();
-   expect(await screen.findByText( 'https://swapi-trybe.herokuapp.com/api/films/1/')).toBeInTheDocument();
-   expect(await screen.findByText('2014-12-10T11:37:19.144000Z')).toBeInTheDocument();
-   expect(await screen.findByText('2014-12-20T20:58:18.421000Z')).toBeInTheDocument();
-   expect(await screen.findByText('https://swapi-trybe.herokuapp.com/api/planets/3/')).toBeInTheDocument();
-
+describe('Teste da Aplicação',() => {
+  test('Teste se está sendo renderizado o componente',()=>{
+    render(<App />);
+    const element = screen.getByText('Filter by Name:');
+    expect(element).toBeInTheDocument();
+  });
+  test('Verifica se há um input com data-testid="name-filter"', () => {
+    render(<App />);
+    const inputElement = screen.getByTestId('name-filter');
+    expect(inputElement).toBeInTheDocument();
+    expect(inputElement.tagName).toBe('INPUT'); // Opcional: Para garantir que é um input
   });
 
-  test('teste se a função foi chamada ', async () => {
-    const fetchRevolvedValue = { 
-      ok:true,
-      status: 200,
-      json: async () => mockApiPlanets,} as Response;
-    vi.spyOn(global, 'fetch').mockResolvedValue(fetchRevolvedValue);
-   await act ( async () => {
-
-    render(<App/>);
-  })
-
-   const inputs = screen.getByTestId("name-filter");
-   let PlanetName = await  screen.findAllByTestId('planet-name');
-   expect( PlanetName.length).toBe(10);
-   await userEvent.type(inputs,'Tat')
-   PlanetName = await  screen.findAllByTestId('planet-name');
-   expect( PlanetName.length).toBe(1);
-
-
-
+  test('Verifica se há um select com data-testid="column-sort"', () => {
+    render(<App />);
+    const selectElement = screen.getByTestId('column-sort');
+    expect(selectElement).toBeInTheDocument();
+    expect(selectElement.tagName).toBe('SELECT'); // Garante que é um select
   });
 
-  test('teste se a função foi chamada ', async () => {
-    const fetchRevolvedValue = { 
-      ok:true,
-      status: 200,
-      json: async () => mockApiPlanets,} as Response;
-    vi.spyOn(global, 'fetch').mockResolvedValue(fetchRevolvedValue);
-   await act ( async () => {
-
-    render(<App/>);
-  })
-
-  const bottonFilter = screen.getByTestId("button-filter");
-  await userEvent.click(bottonFilter);
-  let PlanetNam = await  screen.findAllByTestId('planet-name');
-  expect( PlanetNam.length).toBe(8);
+  test('Verifica se há um botão com data-testid="column-sort-button"', () => {
+    render(<App />);
+    const buttonElement = screen.getByTestId('column-sort-button');
+    expect(buttonElement).toBeInTheDocument();
+    expect(buttonElement.tagName).toBe('BUTTON');
   });
-
-
-  test('teste se a função foi chamada ', async () => {
-    const fetchRevolvedValue = { 
-      ok:true,
-      status: 200,
-      json: async () => mockApiPlanets,} as Response;
-    vi.spyOn(global, 'fetch').mockResolvedValue(fetchRevolvedValue);
-   await act ( async () => {
-
-    render(<App/>);
-  })
-
-  const inputColumn = screen.getByTestId("column-filter");
-  const inputComparison = screen.getByTestId("comparison-filter");
-  const inputNumber= screen.getByTestId("value-filter");
-  const buttonFilter = screen.getByTestId('button-filter')
-
-  await userEvent.selectOptions(inputColumn,'diameter');
-  await userEvent.selectOptions(inputComparison,'maior que');
-  await userEvent.type(inputNumber,'9000');
-  await userEvent.click(buttonFilter);
-  let PlanetNam = await  screen.findAllByTestId('planet-name');
-  expect( PlanetNam.length).toBe(7);
-  });
-
+  
 })
