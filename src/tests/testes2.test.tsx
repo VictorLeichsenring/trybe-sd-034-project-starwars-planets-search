@@ -37,7 +37,7 @@ describe('testando a aplição', () => {
 
   // });
 
-  test('teste se a função foi chamada e se o retorno de planetas é 1 ', async () => {
+  test('teste função ', async () => {
     const fetchRevolvedValue = { 
       ok:true,
       status: 200,
@@ -59,7 +59,7 @@ describe('testando a aplição', () => {
 
   });
 
-  test('teste se a função foi chamada e se o retorno de planetas é 8 ', async () => {
+  test('teste função ', async () => {
     const fetchRevolvedValue = { 
       ok:true,
       status: 200,
@@ -77,7 +77,7 @@ describe('testando a aplição', () => {
   });
 
 
-  test('teste se a função foi chamada e se o retorno de planetas é 7 ', async () => {
+  test('teste função ', async () => {
     const fetchRevolvedValue = { 
       ok:true,
       status: 200,
@@ -101,7 +101,7 @@ describe('testando a aplição', () => {
   expect( PlanetNam.length).toBe(7);
   });
 //==========================================================//
-  test('teste se a função foi chamada do button Ordenar ascendente', async () => {
+  test('teste função', async () => {
     const fetchRevolvedValue = { 
       ok:true,
       status: 200,
@@ -125,7 +125,7 @@ describe('testando a aplição', () => {
   });
 
 
-  test('teste se a função foi chamada do button Ordenar descendente', async () => {
+  test('teste função', async () => {
     const fetchRevolvedValue = { 
       ok:true,
       status: 200,
@@ -150,7 +150,7 @@ describe('testando a aplição', () => {
   });
   //=================================================================//
 
-  test('teste se a função resetPage', async () => {
+  test('teste função resetPage', async () => {
     const fetchRevolvedValue = { 
       ok:true,
       status: 200,
